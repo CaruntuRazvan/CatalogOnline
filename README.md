@@ -1,5 +1,5 @@
 # CatalogOnline - Proiect PAW
-Acest proiect este realizat în ASP.NET MVC și simulează un sistem de management al Facultăți de Mtematica si Informatica, sectia CTI. Aplicația dispune de patru tipuri de utilizatori: Student, Profesor, Secretar și Admin, fiecare având pagini și funcționalități distincte, în funcție de rolul său.
+Acest proiect este realizat în ASP.NET MVC și simulează un sistem de management al Facultății de Matematica si Informatica din Bucuresti, sectia CTI. Aplicația dispune de patru tipuri de utilizatori: Student, Profesor, Secretar și Admin, fiecare având pagini și funcționalități distincte, în funcție de rolul său.
 
 ## Roluri și funcționalități ale utilizatorilor
 ### Student
