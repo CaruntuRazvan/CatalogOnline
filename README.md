@@ -25,8 +25,8 @@ Acest proiect este realizat în ASP.NET MVC și simulează un sistem de manageme
 - management dinamic al cursurilor și notelor.
 
 ## Tehnologii Utilizate
-ASP.NET MVC
-Entity Framework
-SQL Server
-JavaScript (pentru filtre si generare PDF-uri)
-jsPDF (pentru generarea de PDF-uri)
+- ASP.NET MVC
+- Entity Framework
+- SQL Server
+- JavaScript (pentru filtre si generare PDF-uri)
+- jsPDF (pentru generarea de PDF-uri)
