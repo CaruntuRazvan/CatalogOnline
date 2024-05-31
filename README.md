@@ -25,3 +25,10 @@ Paginile și funcționalitățile sunt separate pentru fiecare rol de utilizator
 Management dinamic al cursurilor și notelor.
 Generarea de PDF-uri pentru adeverințele studenților.
 Controale administrative cuprinzătoare pentru managementul utilizatorilor și cursurilor.
+
+Tehnologii Utilizate
+ASP.NET MVC
+Entity Framework
+SQL Server
+JavaScript (pentru funcționalități dinamice)
+jsPDF (pentru generarea de PDF-uri)
