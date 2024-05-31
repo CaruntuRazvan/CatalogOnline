@@ -1,0 +1,19 @@
+﻿@model List<CatalogOnline.Models.User>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    
+
+    @foreach (var user in Model)
+    {
+        <div>
+            <p>Nume: @user.FirstName</p>
+            <p>Prenume: @user.LastName</p>
+            <p>Rol: @user.Role</p>
+            <hr /> <!-- Adăugăm o linie separată între fiecare utilizator -->
+        </div>
+    }
+</div>

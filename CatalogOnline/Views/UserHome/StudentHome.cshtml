@@ -1,0 +1,234 @@
+﻿
+@model CatalogOnline.Models.StudentViewModel
+
+@{
+    ViewData["Title"] = "Student Home";
+}
+
+<h1>Bine ai venit @Model.Student.FirstName @Model.Student.LastName!</h1>
+
+<p>Aici poți accesa cursurile tale, notele și alte informații legate de student.</p>
+<p>Media notelor totala/pentru anul academic selectat: <span id="averageGrade"></span></p>
+
+<input type="text" id="courseSearchInput" placeholder="Cauta după curs...">
+<select id="academicYearDropdown">
+    <option value="">Selectează an</option>
+    @foreach (var academicYear in ViewBag.AcademicYears)
+    {
+        <option value="@academicYear">@academicYear</option>
+    }
+</select>
+
+<select id="sortOrderDropdown">
+    <option value="asc">Sortare ascendenta dupa nota</option>
+    <option value="desc">Sortare descendenta dupa nota</option>
+</select>
+
+<label>
+    <input type="checkbox" id="sortAlphabetically"> Sortează alfabetic
+</label>
+
+<table id="enrollmentsTable">
+    <thead>
+        <tr>
+            <th>Nume curs</th>
+            <th>Notă</th>
+            <th>An</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var enrollment in Model.Enrollments)
+        {
+            var grade = Model.Grades.FirstOrDefault(g => g.CourseId == enrollment.CourseId);
+            <tr class="enrollmentRow" data-academic-year="@enrollment.AcademicYear" data-original-index="@Model.Enrollments.IndexOf(enrollment)">
+                <td>@enrollment.Course.CourseName</td>
+                <td>@(grade != null ? grade.GradeMark.ToString() : "N/A")</td>
+                <td>@enrollment.AcademicYear</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="button-container">
+    <button id="generateCertificateButton">Generează adeverință</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+    document.getElementById('generateCertificateButton').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const firstName = "@Model.Student.FirstName";
+        const lastName = "@Model.Student.LastName";
+        const currentYear = new Date().getFullYear() ;
+        const lastYear = currentYear - 1;
+        const currentDate = `Data: ${new Date().toLocaleDateString()}`;
+
+        const title = "Adeverinta student";
+        const content = `   Subsemnatul ${firstName} ${lastName} este student la Facultatea de Matematica si Informatica, sectia CTI, in anul universitar ${lastYear}-${currentYear}. Eliberam prezenta pentru a-i servi la  ...................................`;
+
+        doc.setFontSize(16);
+        doc.text(title, 105, 20, null, null, 'center');
+
+        doc.setFontSize(12);
+        const textLines = doc.splitTextToSize(content, 180); // Împărțim textul în linii de maxim 180 unități de lățime
+        doc.text(textLines, 20, 40);
+
+        doc.save("Adeverinta_Student.pdf");
+    });
+</script>
+
+
+<script>
+    document.getElementById('academicYearDropdown').addEventListener('change', applyFilters);
+    document.getElementById('sortOrderDropdown').addEventListener('change', applyFilters);
+    document.getElementById('sortAlphabetically').addEventListener('change', function () {
+        var table = document.getElementById('enrollmentsTable').getElementsByTagName('tbody')[0];
+        var rows = Array.from(table.getElementsByClassName('enrollmentRow'));
+        var sortedRows;
+
+        if (this.checked) {
+            sortedRows = rows.sort((a, b) => {
+                var courseA = a.cells[0].innerText.toLowerCase();
+                var courseB = b.cells[0].innerText.toLowerCase();
+                return courseA < courseB ? -1 : courseA > courseB ? 1 : 0;
+            });
+        } else {
+            sortedRows = rows.sort((a, b) => {
+                return a.getAttribute('data-original-index') - b.getAttribute('data-original-index');
+            });
+        }
+
+        // Reatașarea rândurilor sortate
+        sortedRows.forEach(row => table.appendChild(row));
+    });
+    function applyFilters() {
+        var selectedYear = document.getElementById('academicYearDropdown').value;
+        var sortOrder = document.getElementById('sortOrderDropdown').value;
+        var enrollmentRows = document.getElementsByClassName('enrollmentRow');
+        var totalGrade = 0;
+        var gradeCount = 0;
+
+        for (var i = 0; i < enrollmentRows.length; i++) {
+            var academicYear = enrollmentRows[i].getAttribute('data-academic-year');
+            var gradeCell = enrollmentRows[i].getElementsByTagName('td')[1];
+            var grade = parseFloat(gradeCell.textContent);
+
+            if (selectedYear === "" || selectedYear === academicYear) {
+                enrollmentRows[i].style.display = "table-row";
+                if (!isNaN(grade)) {
+                    totalGrade += grade;
+                    gradeCount++;
+                }
+            } else {
+                enrollmentRows[i].style.display = "none";
+            }
+        }
+
+        if (gradeCount > 0) {
+            var average = totalGrade / gradeCount;
+            document.getElementById('averageGrade').textContent = average.toFixed(2);
+        } else {
+            document.getElementById('averageGrade').textContent = "N/A";
+        }
+
+        var rowsArray = Array.prototype.slice.call(enrollmentRows);
+        rowsArray.sort(function (rowA, rowB) {
+            var gradeA = parseFloat(rowA.getElementsByTagName('td')[1].textContent);
+            var gradeB = parseFloat(rowB.getElementsByTagName('td')[1].textContent);
+
+            if (sortOrder === "asc") {
+                return gradeA - gradeB;
+            } else {
+                return gradeB - gradeA;
+            }
+        });
+
+        var tbody = document.querySelector("#enrollmentsTable tbody");
+        tbody.innerHTML = "";
+
+        rowsArray.forEach(function (row) {
+            tbody.appendChild(row);
+        });
+    }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var searchInput = document.getElementById('courseSearchInput');
+        var enrollmentRows = document.querySelectorAll('.enrollmentRow');
+
+        searchInput.addEventListener('input', function () {
+            var searchText = searchInput.value.toLowerCase();
+            enrollmentRows.forEach(function (row) {
+                var courseName = row.querySelector('td:first-child').textContent.toLowerCase();
+                if (courseName.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        applyFilters();
+    });
+</script>
+<script>
+    // Verificăm dacă există mesaj de alertă în TempData
+    var alertMessage = "@TempData["AlertMessage"]";
+
+    // Dacă există un mesaj de alertă, afișăm un mesaj de alertă
+    if (alertMessage) {
+        alert(alertMessage);
+    }
+</script>
+<style>
+    
+    .content {
+        padding: 20px;
+        text-align: center;
+    }
+
+    #courseSearchInput, #academicYearDropdown, #sortOrderDropdown, #sortAlphabetically {
+        margin: 5px;
+    }
+
+    #enrollmentsTable {
+        width: 50%;
+        border-collapse: collapse;
+        margin: 20px auto;
+    }
+
+        #enrollmentsTable th, #enrollmentsTable td {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        #enrollmentsTable th {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        #enrollmentsTable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #enrollmentsTable tr:hover {
+            background-color: #d5d5d5;
+        }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-end; 
+        padding: 10px; 
+    }
+
+    #generateCertificateButton {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+    }
+        
+
+</style>

@@ -1,0 +1,210 @@
+﻿@model CatalogOnline.Models.ProfessorViewModel
+
+@{
+    ViewData["Title"] = "Professor Home";
+}
+
+<h1>Bine ai venit, @Model.Professor.FirstName @Model.Professor.LastName!</h1>
+
+<p>Aici poți vizualiza cursurile ținute de tine, studenții înscriși la cursurile tale și notele acestora.</p>
+<br>
+<h2>Cursuri</h2>
+
+<input type="text" id="studentSearchInput" placeholder="Caută după student..." style="margin-bottom: 20px;">
+
+@if (Model.Courses != null && Model.Courses.Any())
+{
+    <ul>
+        @foreach (var courseViewModel in Model.Courses)
+        {
+            <li>
+                <a href="#" class="course-link toggle-link">@courseViewModel.Course.CourseName</a>
+                <div class="students-table" style="display:none;">
+                    @if (courseViewModel.Students != null && courseViewModel.Students.Any())
+                    {
+                        <table class="students-table">
+                            <thead>
+                                <tr>
+                                    <th>Nume student</th>
+                                    <th>Nota</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var studentViewModel in courseViewModel.Students)
+                                {
+                                    <tr class="student-row">
+                                        <td>@studentViewModel.Student.FirstName @studentViewModel.Student.LastName</td>
+                                        <td class="grade-cell">
+                                            <div class="grade-container">
+                                                @if (studentViewModel.Grades != null && studentViewModel.Grades.Any())
+                                                {
+                                                    @foreach (var grade in studentViewModel.Grades)
+                                                    {
+                                                        <span>@grade.GradeMark</span>
+                                                        <form class="deleteGradeForm" method="post" asp-action="DeleteGrade">
+                                                            <input type="hidden" name="StudentId" value="@studentViewModel.Student.UserId" />
+                                                            <input type="hidden" name="CourseId" value="@courseViewModel.Course.CourseId" />
+                                                            <input type="hidden" name="ProfessorId" value="@Model.Professor.UserId" />
+                                                            <input type="hidden" name="GradeId" value="@grade.GradeId" />
+                                                            <button type="submit" class="action-button">Șterge Notă</button>
+                                                        </form>
+                                                        <br />
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span id="@("gradeSpan_" + studentViewModel.Student.UserId)">N/A</span>
+                                                    <button class="showGradeFormBtn action-button">Adaugă Notă</button>
+                                                    <form class="addGradeForm" asp-action="AddGrade" method="post" style="display:none;">
+                                                        <input type="hidden" name="StudentId" value="@studentViewModel.Student.UserId" />
+                                                        <input type="hidden" name="CourseId" value="@courseViewModel.Course.CourseId" />
+                                                        <input type="number" name="GradeMark" min="4" max="10" required />
+                                                        <input type="hidden" name="ProfessorId" value="@Model.Professor.UserId" />
+                                                        <button type="submit" class="action-button">Salvează Notă</button>
+                                                    </form>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>Nu există studenți!</p>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Profesorul nu are cursuri asignate.</p>
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggleLinks = document.querySelectorAll('.toggle-link');
+        var showGradeFormButtons = document.querySelectorAll('.showGradeFormBtn');
+        var searchInput = document.getElementById('studentSearchInput');
+
+        toggleLinks.forEach(function (toggleLink) {
+            toggleLink.addEventListener('click', function (event) {
+                event.preventDefault();
+                var table = this.nextElementSibling;
+                if (table.style.display === 'none') {
+                    table.style.display = 'block';
+                } else {
+                    table.style.display = 'none';
+                }
+            });
+        });
+
+        showGradeFormButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var form = this.nextElementSibling;
+                form.style.display = 'block';
+                this.style.display = 'none';
+                var gradeSpanId = "gradeSpan_" + form.querySelector("input[name='StudentId']").value;
+                var gradeSpan = document.getElementById(gradeSpanId);
+                if (gradeSpan !== null) {
+                    gradeSpan.style.display = 'none';
+                }
+            });
+        });
+
+        searchInput.addEventListener('input', function () {
+            var searchText = searchInput.value.toLowerCase();
+            var studentRows = document.querySelectorAll('.student-row');
+
+            studentRows.forEach(function (row) {
+                var studentName = row.querySelector('td:first-child').textContent.toLowerCase();
+                if (studentName.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+#courseSearchInput {
+    margin-bottom : 20px;
+}
+#enrollmentsTable, .students-table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+#enrollmentsTable th, .students-table th, #enrollmentsTable td, .students-table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+}
+
+#enrollmentsTable th, .students-table th {
+    background-color: #6c757d;
+    color: white;
+}
+
+#enrollmentsTable tr:nth-child(even), .students-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#enrollmentsTable tr:hover, .students-table tr:hover {
+    background-color: #d5d5d5;
+}
+
+#enrollmentsTable tr, .students-table tr {
+    transition: background-color 0.3s ease;
+}
+
+.course-link {
+        font-size: 1.2em;
+        font-weight: bold;
+       
+        text-decoration: none;
+        margin-bottom: 10px;
+       
+}
+
+.grade-cell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.grade-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.grade-container span {
+    flex: 1;
+}
+
+/* Stilizare pentru butoane */
+button {
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+
+.deleteGradeForm {
+    display: inline;
+    margin-right: 5px;
+}
+
+.action-button {
+    margin-left: auto;
+}
+</style>
