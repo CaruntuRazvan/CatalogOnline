@@ -1,7 +1,7 @@
 # CatalogOnline - Proiect PAW
 Acest proiect este realizat în ASP.NET MVC și simulează un sistem de management al unei facultăți. Aplicația dispune de patru tipuri de utilizatori: Student, Profesor, Secretar și Admin, fiecare având pagini și funcționalități distincte, în funcție de rolul său.
 
-## Roluri și Funcționalități ale utilizatorilor
+## Roluri și funcționalități ale utilizatorilor
 ### Student
 - vizualizează cursurile la care este înscris și notele sale.
 - generează adeverința.
