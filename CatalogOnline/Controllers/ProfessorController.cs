@@ -8,7 +8,7 @@ namespace CatalogOnline.Controllers
     public class ProfessorController : Controller
     {
         private readonly ILogger<ProfessorController> _logger;
-        private readonly CatalogContext _context; // Adăugăm o referință către contextul bazei de date
+        private readonly CatalogContext _context; 
 
         public ProfessorController(ILogger<ProfessorController> logger, CatalogContext context)
         {
@@ -89,7 +89,7 @@ namespace CatalogOnline.Controllers
                 // Generăm mesajul de alertă
                 string alertMessage = $"A fost adaugata o nota pentru cursul {course.CourseName}. Nota ta este {model.GradeMark}.";
                 TempData["AlertMessage"] = alertMessage;
-                //return View();
+               
 
                 return RedirectToAction("ProfessorHome", new { userId = model.ProfessorId });
 

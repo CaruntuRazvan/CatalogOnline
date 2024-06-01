@@ -20,14 +20,19 @@ namespace CatalogOnline.Controllers
             _logger = logger;
             _context = context;
         }
-
+        
         public IActionResult Index()
         {
             var users = _context.Users.ToList();
             return View(users);
 
         }
-   
+
+        public IActionResult Introduction()
+        {
+            return View();
+        }
+        
         public IActionResult Privacy()
         {
             return View();

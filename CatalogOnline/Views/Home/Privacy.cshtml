@@ -1,6 +1,34 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Politica de Confidențialitate";
 }
-<h1>@ViewData["Title"]</h1>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CatalogOnline</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h1 class="card-title">@ViewData["Title"]</h1>
+            </div>
+            <div class="card-body">
+                
+                <h2 class="mt-4">Colectarea, utilizarea si protectia datelor</h2>
+                <p>
+                    Colectăm informații personale, precum numele și adresa de email, pentru a vă oferi servicii mai bune. Utilizăm datele colectate pentru a îmbunătăți serviciile și a vă ține la curent cu modificările acestora.Protejăm datele dvs. folosind măsuri de securitate adecvate.
+                </p>
+                
+            </div>
+        </div>
+    </div>
 
-<p>Use this page to detail your site's privacy policy.</p>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+</body>
+</html>

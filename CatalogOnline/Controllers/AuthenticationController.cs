@@ -24,6 +24,10 @@ public class AuthenticationController : Controller
     {
         return View();
     }
+    public IActionResult Introduction()
+    {
+        return View();
+    }
     /*
     [HttpPost]
     public IActionResult Register(User model)

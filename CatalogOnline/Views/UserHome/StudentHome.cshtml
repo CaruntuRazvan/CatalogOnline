@@ -71,7 +71,7 @@
         doc.text(title, 105, 20, null, null, 'center');
 
         doc.setFontSize(12);
-        const textLines = doc.splitTextToSize(content, 180); // Împărțim textul în linii de maxim 180 unități de lățime
+        const textLines = doc.splitTextToSize(content, 180); 
         doc.text(textLines, 20, 40);
 
         doc.save("Adeverinta_Student.pdf");
@@ -173,13 +173,14 @@
     });
 </script>
 <script>
-    // Verificăm dacă există mesaj de alertă în TempData
-    var alertMessage = "@TempData["AlertMessage"]";
+    window.onload = function () {
+        // Verificăm dacă există mesaj de alertă în TempData
+        var alertMessage = "@TempData["AlertMessage"]";
 
-    // Dacă există un mesaj de alertă, afișăm un mesaj de alertă
-    if (alertMessage) {
-        alert(alertMessage);
-    }
+        if (alertMessage) {
+            alert(alertMessage);
+        }
+    };
 </script>
 <style>
     

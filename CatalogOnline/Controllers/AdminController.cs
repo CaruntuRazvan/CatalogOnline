@@ -10,7 +10,7 @@ namespace CatalogOnline.Controllers
     public class AdminController : Controller
     {
         private readonly ILogger<AdminController> _logger;
-        private readonly CatalogContext _context; // Adăugăm o referință către contextul bazei de date
+        private readonly CatalogContext _context; 
 
         public AdminController(ILogger<AdminController> logger, CatalogContext context)
         {
@@ -23,7 +23,7 @@ namespace CatalogOnline.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        // Acțiunea care returnează pagina AdminHome
+        
         [HttpGet("/UserHome/AdminHome")]
         public IActionResult AdminHome()
         {
@@ -32,21 +32,21 @@ namespace CatalogOnline.Controllers
                 .ToList();
 
             var professors = _context.Users
-                .Where(u => u.Role == UserType.Professor) // Filtrăm doar profesorii
+                .Where(u => u.Role == UserType.Professor) 
                 .ToList();
 
             var students = _context.Users
-                .Where(u => u.Role == UserType.Student) // Filtrăm doar studenții
+                .Where(u => u.Role == UserType.Student) 
                 .ToList();
             var secretaries = _context.Users
-                .Where(u => u.Role == UserType.Secretary) // Filtrăm doar secretarele
+                .Where(u => u.Role == UserType.Secretary) 
                 .ToList();
 
             var adminViewModel = new AdminViewModel
             {
                 Courses = courses.Select(course => new CourseProfessorStudentsViewModel
                 {
-                    CourseId = course.CourseId, // Adăugăm CourseId în model
+                    CourseId = course.CourseId, // Adăuga CourseId în model
                     CourseName = course.CourseName,
                     ProfessorName = GetProfessorName(course.ProfessorId),
                     Students = GetStudentsNames(course.CourseId)
@@ -63,7 +63,7 @@ namespace CatalogOnline.Controllers
         private string GetProfessorName(int professorId)
         {
             var professor = _context.Users.FirstOrDefault(u => u.UserId == professorId);
-            //return professor != null ? professor.FirstName : "Unknown Professor";
+            
             return professor != null ? $"{professor.FirstName} {professor.LastName}" : "Unknown Professor";
         }
 
@@ -97,7 +97,6 @@ namespace CatalogOnline.Controllers
             }
             else
             {
-                // Tratează cazul în care datele de intrare sunt invalide
                 return RedirectToAction("Error");
             }
         }
@@ -167,7 +166,7 @@ namespace CatalogOnline.Controllers
 
             if (student != null && course != null)
             {
-                // Adaugăm asocierea în baza de date (de exemplu, folosind o tabelă de înregistrări)
+                
                 var enrollment = new Enrollment
                 {
                     StudentId = studentId,
@@ -177,7 +176,7 @@ namespace CatalogOnline.Controllers
 
                 _context.Enrollments.Add(enrollment);
                 _context.SaveChanges();
-                // După adăugarea asocierea în baza de date și salvarea modificărilor
+                
                 string alertMessage = $"Ai fost adaugat la un curs nou: {course.CourseName}.";
                 TempData["AlertMessage"] = alertMessage;
 
@@ -201,7 +200,7 @@ namespace CatalogOnline.Controllers
             }
             else
             {
-                // Tratează cazul în care cursul nu există
+                // eroare
                 return RedirectToAction("Error");
             }
         }
@@ -218,7 +217,7 @@ namespace CatalogOnline.Controllers
             }
             else
             {
-                // Tratează cazul în care utilizatorul nu există
+                
                 return RedirectToAction("Error");
             }
         }
@@ -227,7 +226,7 @@ namespace CatalogOnline.Controllers
         public IActionResult ResetDatabase()
         {
             _context.ClearDatabase();
-            return RedirectToAction("AdminHome"); // Redirecționează către pagina adminului după resetare
+            return RedirectToAction("AdminHome"); 
         }
     }
 }

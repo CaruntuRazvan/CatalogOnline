@@ -29,7 +29,7 @@ namespace CatalogOnline.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
+        
         [HttpGet("/UserHome/SecretaryHome")]
         public IActionResult SecretaryHome()
         {
@@ -55,6 +55,7 @@ namespace CatalogOnline.Controllers
         }
         private List<SecretaryStudentViewModel> GetStudentsWithGrades(int courseId)
         {
+            
             var studentsWithGrades = _context.Enrollments
                 .Where(enrollment => enrollment.CourseId == courseId)
                 .SelectMany(enrollment =>
@@ -74,7 +75,7 @@ namespace CatalogOnline.Controllers
         private string GetProfessorName(int professorId)
         {
             var professor = _context.Users.FirstOrDefault(u => u.UserId == professorId);
-            //return professor != null ? professor.FirstName : "Unknown Professor";
+            
             return professor != null ? $"{professor.FirstName} {professor.LastName}" : "Unknown Professor";
         }
 
