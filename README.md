@@ -13,7 +13,7 @@ Acest proiect este realizat în ASP.NET MVC și simulează un sistem de manageme
 - vizualizează toate cursurile existente
 - vizualizează profesorul care predă fiecare curs
 - vizualizează toți studenții și notele lor pentru fiecare curs
-- generareaza in format PDF cataloagele cu note pentru cursuri
+- generareaza in format PDF cataloagele cu note pentru studenti
 ### Admin
 - vizualizează toate cursurile
 - adaugă sau șterge utilizatori și cursuri
