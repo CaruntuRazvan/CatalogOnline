@@ -82,6 +82,39 @@
                     <button type="submit" class="action-button">Adauga utilizator</button>
                 </form>
             </div>
+            <div class="form-section">
+                <h2>Adaugare student la un curs</h2>
+                <form asp-action="AssignStudentToCourse" method="post">
+                    <div>
+                        <label for="studentId">Student:</label>
+                        <select id="studentId" name="studentId">
+                            @foreach (var student in Model.Students)
+                            {
+                                <option value="@student.UserId">@student.FirstName @student.LastName</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label for="courseId">Curs:</label>
+                        <select id="courseId" name="courseId">
+                            @foreach (var course in Model.Courses)
+                            {
+                                <option value="@course.CourseId">@course.CourseName</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <label for="academicYear">An academic:</label>
+                        <select id="academicYear" name="academicYear">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="action-button">Asociaza student</button>
+                </form>
+            </div>
         </div>
 
         <div class="column">
@@ -116,12 +149,11 @@
                 </form>
             </div>
 
-
             <div class="form-section">
-                <h2>Adaugare student la un curs</h2>
-                <form asp-action="AssignStudentToCourse" method="post">
+                <h2>Elimină studentul de la un curs</h2>
+                <form asp-action="DeleteEnrollment" method="post">
                     <div>
-                        <label for="studentId">Student:</label>
+                        <label for="studentId">Selectează studentul:</label>
                         <select id="studentId" name="studentId">
                             @foreach (var student in Model.Students)
                             {
@@ -130,7 +162,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="courseId">Curs:</label>
+                        <label for="courseId">Selectează cursul:</label>
                         <select id="courseId" name="courseId">
                             @foreach (var course in Model.Courses)
                             {
@@ -138,18 +170,10 @@
                             }
                         </select>
                     </div>
-                    <div>
-                        <label for="academicYear">An academic:</label>
-                        <select id="academicYear" name="academicYear">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="action-button">Asociaza student</button>
+                    <button type="submit" class="action-button">Șterge înrolare</button>
                 </form>
             </div>
+
         </div>
     </div>
     <form asp-action="ResetDatabase" method="post" id="resetForm" style="position: fixed; bottom: 10px; right: 10px;">

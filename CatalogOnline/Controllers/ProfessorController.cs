@@ -1,8 +1,8 @@
 ﻿using CatalogOnline.ContextModels;
 using CatalogOnline.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-
 namespace CatalogOnline.Controllers
 {
     public class ProfessorController : Controller
@@ -89,8 +89,8 @@ namespace CatalogOnline.Controllers
                 // Generăm mesajul de alertă
                 string alertMessage = $"A fost adaugata o nota pentru cursul {course.CourseName}. Nota ta este {model.GradeMark}.";
                 TempData["AlertMessage"] = alertMessage;
-               
-
+                
+                
                 return RedirectToAction("ProfessorHome", new { userId = model.ProfessorId });
 
             }

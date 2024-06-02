@@ -3,6 +3,7 @@ using CatalogOnline.Logic;
 using CatalogOnline.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace CatalogOnline.Controllers
@@ -176,10 +177,9 @@ namespace CatalogOnline.Controllers
 
                 _context.Enrollments.Add(enrollment);
                 _context.SaveChanges();
-                
+
                 string alertMessage = $"Ai fost adaugat la un curs nou: {course.CourseName}.";
                 TempData["AlertMessage"] = alertMessage;
-
                 return RedirectToAction("AdminHome");
             }
             else
@@ -221,6 +221,25 @@ namespace CatalogOnline.Controllers
                 return RedirectToAction("Error");
             }
         }
+        [HttpPost("/AdminViews/DeleteEnrollment")]
+        public IActionResult DeleteEnrollment(int studentId, int courseId)
+        {
+            var enrollmentToDelete = _context.Enrollments.FirstOrDefault(e => e.StudentId == studentId && e.CourseId == courseId);
+
+            if (enrollmentToDelete != null)
+            {
+                _context.Enrollments.Remove(enrollmentToDelete);
+                _context.SaveChanges();
+
+                return RedirectToAction("AdminHome");
+            }
+            else
+            {
+                // Înregistrarea nu a fost găsită, poate doriți să tratați această situație diferit
+                return RedirectToAction("Error");
+            }
+        }
+
 
         [HttpPost]
         public IActionResult ResetDatabase()
