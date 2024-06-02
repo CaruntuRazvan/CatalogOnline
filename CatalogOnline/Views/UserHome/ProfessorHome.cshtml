@@ -12,6 +12,14 @@
 
 <input type="text" id="studentSearchInput" placeholder="Caută după student..." style="margin-bottom: 20px;">
 
+<select id="gradeSortSelect">
+    <option value="asc">Sortare ascendenta dupa nota</option>
+    <option value="desc">Sortare descendenta dupa nota</option>
+</select>
+<select id="nameSortSelect">
+    <option value="ascName">Sorteaza dupa nume (A-Z)</option>
+    <option value="descName">Sorteaza dupa nume (Z-A)</option>
+</select>
 @if (Model.Courses != null && Model.Courses.Any())
 {
     <ul>
@@ -129,6 +137,79 @@ else
             });
         });
     });
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        var gradeSortSelect = document.getElementById('gradeSortSelect');
+        gradeSortSelect.addEventListener('change', function () {
+            var sortOrder = gradeSortSelect.value;
+            sortGrades(sortOrder);
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        var nameSortSelect = document.getElementById('nameSortSelect');
+        nameSortSelect.addEventListener('change', function () {
+            var sortOrder = nameSortSelect.value;
+            sortNames(sortOrder);
+        });
+    });
+
+    function sortGrades(order) {
+        var courseTables = document.querySelectorAll('.students-table');
+
+        courseTables.forEach(function (table) {
+            var studentRows = table.querySelectorAll('.student-row');
+            var sortedRows = Array.from(studentRows);
+
+            sortedRows.sort(function (a, b) {
+                var gradeA = parseInt(a.querySelector('.grade-cell span').textContent);
+                var gradeB = parseInt(b.querySelector('.grade-cell span').textContent);
+
+                if (order === 'asc') {
+                    return gradeA - gradeB;
+                } else {
+                    return gradeB - gradeA;
+                }
+            });
+
+            var tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear the table body
+
+            sortedRows.forEach(function (row) {
+                tbody.appendChild(row);
+            });
+        });
+    }
+
+    function sortNames(order) {
+        var courseTables = document.querySelectorAll('.students-table');
+
+        courseTables.forEach(function (table) {
+            var studentRows = table.querySelectorAll('.student-row');
+            var sortedRows = Array.from(studentRows);
+
+            sortedRows.sort(function (a, b) {
+                var firstNameA = a.querySelector('td:first-child').textContent.trim().toLowerCase();
+                var firstNameB = b.querySelector('td:first-child').textContent.trim().toLowerCase();
+
+                if (order === 'ascName') {
+                    return firstNameA.localeCompare(firstNameB);
+                } else {
+                    return firstNameB.localeCompare(firstNameA);
+                }
+            });
+
+            var tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear the table body
+
+            sortedRows.forEach(function (row) {
+                tbody.appendChild(row);
+            });
+        });
+    }
+
+
+
 </script>
 
 <style>
