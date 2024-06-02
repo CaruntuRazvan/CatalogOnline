@@ -29,11 +29,6 @@ Acest proiect este realizat în ASP.NET MVC și simulează un sistem de manageme
 - sterge asocieri intre studenti si cursuri
 - resetează întreaga bază de date, ștergând toate informațiile din baza de date
 
-## Caracteristici
-- autentificare și autorizare bazată pe roluri
-- paginile și funcționalitățile sunt separate pentru fiecare rol de utilizator
-- management dinamic al cursurilor și notelor
-
 ## Tehnologii Utilizate
 - ASP.NET MVC
 - Entity Framework
