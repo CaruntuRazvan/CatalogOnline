@@ -1,7 +1,5 @@
 # CatalogOnline - Proiect PAW
-# Proiect de Management al Facultății de Matematica și Informatica
 
-## Descriere
 Acest proiect este realizat în ASP.NET MVC și simulează un sistem de management al Facultății de Matematica și Informatica din București, sectia CTI. Aplicația este conectată la o bază de date relațională în care sunt stocate informațiile necesare pentru funcționarea sistemului. Prin intermediul acestor tabele și al relațiilor dintre ele, aplicația poate gestiona informațiile legate de cursuri, înscrieri și note pentru utilizatorii sistemului, oferind funcționalități distincte în funcție de rolul fiecărui utilizator.
 
 ### User
